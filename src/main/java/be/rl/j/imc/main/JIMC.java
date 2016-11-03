@@ -9,7 +9,7 @@ public class JIMC {
         double tailleIdeal = -1;
 
 
-        //Coucou Jamal Melhaoui Champion Boxe & Cie Marroco
+        //Coucou Jamal Melhaoui Champion Boxe & Cie Marroco 1997
         double poids = 54.;
         double taille = 1.65;
 
