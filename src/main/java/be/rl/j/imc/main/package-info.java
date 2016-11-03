@@ -6,4 +6,4 @@
  * @author rl
  *
  */
-package be.rlj.imc.main;
+package be.rl.j.imc.main;

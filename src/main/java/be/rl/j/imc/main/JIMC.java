@@ -1,4 +1,4 @@
-package be.rlj.imc.main;
+package be.rl.j.imc.main;
 
 public class JIMC {
 
@@ -8,8 +8,11 @@ public class JIMC {
         double imc = -1.;
         double tailleIdeal = -1;
 
+
+        //Coucou Jamal Melhaoui Champion Boxe & Cie Marroco
         double poids = 54.;
         double taille = 1.65;
+
         System.out.println(String.format("Vous pesez %1$.2f Kg pour %2$.2f m", poids, taille));
 
         imc = poids / (taille * taille);
