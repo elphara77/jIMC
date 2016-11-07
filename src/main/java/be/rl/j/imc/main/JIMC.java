@@ -9,7 +9,7 @@ public class JIMC {
 
     private final static String TITRE = "Calcul sur l'indice de masse corporelle (français)";
 
-    private static final Double FACTEUR_CALCUL_POIDS_IMC22 = 10_000.;
+    private static final Double FACTEUR_CALCUL_POIDS_IMC2 = 100_00.;
 
     private final static Double IMC_IDEAL_25 = 25.;
     private final static Double IMC_IDEAL_24 = 24.;
@@ -22,10 +22,12 @@ public class JIMC {
     private final static Double[] IMC_IDEALS = {IMC_IDEAL_25, IMC_IDEAL_24, IMC_IDEAL_23, IMC_IDEAL_22, IMC_IDEAL_225, IMC_IDEAL_21, IMC_IDEAL_20};
 
     private static DoubleBinaryOperator imcOp = (poids, taille) -> poids
-            / ((taille / FACTEUR_CALCUL_POIDS_IMC22 / FACTEUR_CALCUL_POIDS_IMC22) * (taille / FACTEUR_CALCUL_POIDS_IMC2 / FACTEUR_CALCUL_POIDS_IMC22));
-    private static DoubleBinaryOperator poidIdealOp = (imcIdeal, taille) -> imcIdeal * taille * taille / FACTEUR_CALCUL_POIDS_IMC2 / FACTEUR_CALCUL_POIDS_IMC22;
+            / ((taille / FACTEUR_CALCUL_POIDS_IMC2 / FACTEUR_CALCUL_POIDS_IMC2) * (taille / FACTEUR_CALCUL_POIDS_IMC2 / FACTEUR_CALCUL_POIDS_IMC2));
+
+    private static DoubleBinaryOperator poidIdealOp = (imcIdeal, taille) -> imcIdeal * taille * taille / FACTEUR_CALCUL_POIDS_IMC2 / FACTEUR_CALCUL_POIDS_IMC2;
+
     private static Function<Double, Function<Double, UnaryOperator<Double>>> surchargeFunction = imcIdeal -> poids -> taille -> poids
-            - (imcIdeal * taille * taille) / FACTEUR_CALCUL_POIDS_IMC22 / FACTEUR_CALCUL_POIDS_IMC22;
+            - (imcIdeal * taille * taille) / FACTEUR_CALCUL_POIDS_IMC2 / FACTEUR_CALCUL_POIDS_IMC2;
 
     private static Scanner scanner = new Scanner(System.in);
 
