@@ -1,5 +1,6 @@
 package be.rl.j.imc.main;
 
+import java.util.Arrays;
 import java.util.Scanner;
 import java.util.function.DoubleBinaryOperator;
 import java.util.function.Function;
@@ -12,9 +13,18 @@ import java.util.function.UnaryOperator;
 public class JIMC {
 
     private final static String TITRE = "= Calcul sur l'indice de masse corporelle (français) =";
-    private final static String SEPARATOR = "===============================================================================================================================================================";
+
+    private final static byte SEPARATOR_CHAR = '=';
+    private static StringBuilder SEPARATOR = null;
 
     private static final Double CM_TO_METRE_FACTEUR = .01;
+
+    static {
+        // for fun whenever possible :P
+        byte[] bytes = new byte[80];
+        Arrays.fill(bytes, 0, 79, SEPARATOR_CHAR);
+        SEPARATOR = new StringBuilder(new String(bytes));
+    }
 
     private static enum ImcIdeal {
 
@@ -90,15 +100,16 @@ public class JIMC {
                                 str2 = String.format(" alors vous êtes en SOUS-charge pondérale de %.2f Kg :-( !", -surcharge, imcIdeal);
                             }
                             final String str = String.format("%s%s", str1, str2);
-                            System.out.println(SEPARATOR);
+                            System.out.println(SEPARATOR.toString());
                             System.out.println(str);
                         }
                     }
                 }
-                // Still bugs to be fixed after this line ... pfff the
+                // Still bugs to be fixed after this line sure
+                // before... pfff the
                 // comment :D
                 {
-                    System.out.println(SEPARATOR);
+                    System.out.println(SEPARATOR.toString());
                     System.out.println();
                     System.out.print("==> Votre IMC visé svp ? ");
                     String targetImcStr = scanner.next("\\d+");
