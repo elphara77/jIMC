@@ -7,8 +7,14 @@ import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
 /**
+ *
+ * @since 11/03/2016
+ *
+ * @version beta je suis
+ *
  * @author rl
  *
+ * @category fun
  */
 public class JIMC {
 
