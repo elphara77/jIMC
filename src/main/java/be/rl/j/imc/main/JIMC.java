@@ -5,6 +5,10 @@ import java.util.function.DoubleBinaryOperator;
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
+/**
+ * @author rl
+ *
+ */
 public class JIMC {
 
     private final static String TITRE = "= Calcul sur l'indice de masse corporelle (français) =";
@@ -91,6 +95,8 @@ public class JIMC {
                         }
                     }
                 }
+                // Still bugs to be fixed after this line ... pfff the
+                // comment :D
                 {
                     System.out.println(SEPARATOR);
                     System.out.println();
