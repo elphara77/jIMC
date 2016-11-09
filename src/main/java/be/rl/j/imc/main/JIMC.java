@@ -21,8 +21,8 @@ public class JIMC {
 
     static {
         // for fun whenever possible :P
-        byte[] bytes = new byte[80];
-        Arrays.fill(bytes, 0, 79, SEPARATOR_CHAR);
+        byte[] bytes = new byte[180];
+        Arrays.fill(bytes, 0, bytes.length, SEPARATOR_CHAR);
         SEPARATOR = new StringBuilder(new String(bytes));
     }
 
@@ -56,9 +56,9 @@ public class JIMC {
 
     public static void main(String[] args) {
         do {
-            System.out.println(TITRE.replaceAll(".", "="));
+            System.out.println(TITRE.replaceAll(".", "" + (char) SEPARATOR_CHAR));
             System.out.println(TITRE);
-            System.out.println(TITRE.replaceAll(".", "="));
+            System.out.println(TITRE.replaceAll(".", "" + (char) SEPARATOR_CHAR));
 
             try {
                 System.out.println();
