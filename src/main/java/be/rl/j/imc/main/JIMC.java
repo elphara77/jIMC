@@ -14,6 +14,8 @@ import java.util.function.UnaryOperator;
  *
  * @author rl
  *
+ * @see "Ex I 1)" <a href="https://goo.gl/AxYexx">MySelf</a>
+ *
  * @category fun
  */
 public class JIMC {
