@@ -219,4 +219,8 @@ public class JIMC {
 		System.out.println();
 		System.out.println("Merci :-)");
 	}
+
+	public Double scanMyNumber(String str) {
+		return Double.parseDouble(str);
+	}
 }
