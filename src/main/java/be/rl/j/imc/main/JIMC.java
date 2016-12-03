@@ -5,6 +5,8 @@ import java.util.Scanner;
 import java.util.function.DoubleBinaryOperator;
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  *
@@ -221,6 +223,15 @@ public class JIMC {
 	}
 
 	public static Double scanMyNumber(String str) {
-		return Double.parseDouble(str.replaceAll("[,\\.]+", "."));
+		// String myStr = str.trim().replaceAll("[,\\.]", ".");
+		// Pattern dotRegex = Pattern.compile("\\.");
+		//
+		// StringBuilder sb = new StringBuilder(myStr).reverse();
+		// Matcher matcher = dotRegex.matcher(sb.toString());
+		// while (matcher.find()) {
+		// str = sb.reverse().toString().replaceFirst("\\.", "");
+		// myStr = new StringBuilder(myStr).reverse().toString();
+		// }
+		return Double.parseDouble(str.replace(",", "."));
 	}
 }
