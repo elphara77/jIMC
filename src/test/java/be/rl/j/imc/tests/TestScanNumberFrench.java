@@ -1,5 +1,7 @@
 package be.rl.j.imc.tests;
 
+import static be.rl.j.imc.main.JIMC.scanMyNumber;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -8,8 +10,6 @@ import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
-
-import be.rl.j.imc.main.JIMC;
 
 @FixMethodOrder(MethodSorters.JVM)
 public class TestScanNumberFrench {
@@ -32,50 +32,50 @@ public class TestScanNumberFrench {
 
 	@Test
 	public void test1() {
-		Double actual = new JIMC().scanMyNumber("1");
+		Double actual = scanMyNumber("1");
 		Double expected = 1.;
 		Assert.assertEquals(expected, actual);
 	}
 
 	@Test
 	public void test2() {
-		Double actual = new JIMC().scanMyNumber("2");
+		Double actual = scanMyNumber("2");
 		Double expected = 2.;
 		Assert.assertEquals(expected, actual);
 	}
 
 	@Test
 	public void test3() {
-		Double actual = new JIMC().scanMyNumber("2 ");
+		Double actual = scanMyNumber("2 ");
 		Double expected = 2.;
 		Assert.assertEquals(expected, actual);
 	}
 
 	@Test
 	public void test4() {
-		Double actual = new JIMC().scanMyNumber("  2 ");
+		Double actual = scanMyNumber("  2 ");
 		Double expected = 2.;
 		Assert.assertEquals(expected, actual);
 	}
 
 	@Test
 	public void test5() {
-		Double actual = new JIMC().scanMyNumber("  2.5 ");
+		Double actual = scanMyNumber("  2.5 ");
 		Double expected = 2.5;
 		Assert.assertEquals(expected, actual);
 	}
 
-//	@Test
-//	public void test6() {
-//		Double actual = new JIMC().scanMyNumber(" 2,5 ");
-//		Double expected = 2.5;
-//		Assert.assertEquals(expected, actual);
-//	}
-//
-//	@Test
-//	public void test7() {
-//		Double actual = new JIMC().scanMyNumber(" 2,5, ");
-//		Double expected = 2.5;
-//		Assert.assertEquals(expected, actual);
-//	}
+	@Test
+	public void test6() {
+		Double actual = scanMyNumber(" 2,5 ");
+		Double expected = 2.5;
+		Assert.assertEquals(expected, actual);
+	}
+
+	@Test
+	public void test7() {
+		Double actual = scanMyNumber(" 2,5, ");
+		Double expected = 2.5;
+		Assert.assertEquals(expected, actual);
+	}
 }

@@ -63,7 +63,7 @@ public class JIMC {
 
 	private static final String[] quit = new String[] { "non" };
 
-	public static void main(String[] args) {
+	public static void main0(String[] args) {
 		do {
 			System.out.println(TITRE.replaceAll(".", "" + (char) SEPARATOR_CHAR));
 			System.out.println(TITRE);
@@ -220,7 +220,7 @@ public class JIMC {
 		System.out.println("Merci :-)");
 	}
 
-	public Double scanMyNumber(String str) {
-		return Double.parseDouble(str);
+	public static Double scanMyNumber(String str) {
+		return Double.parseDouble(str.replaceAll("[,\\.]+", "."));
 	}
 }
