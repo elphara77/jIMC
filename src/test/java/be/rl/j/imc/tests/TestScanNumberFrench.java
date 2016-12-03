@@ -1,6 +1,4 @@
-package be.rl.j.test.imc.main;
-
-import static org.junit.Assert.assertTrue;
+package be.rl.j.imc.tests;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -11,6 +9,7 @@ import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
 import be.rl.j.imc.main.JIMC;
+import junit.framework.Assert;
 
 @FixMethodOrder(MethodSorters.JVM)
 public class TestScanNumberFrench {
@@ -35,7 +34,7 @@ public class TestScanNumberFrench {
 	public void test1() {
 		Double actual = new JIMC().scanMyNumber("1");
 		Double expected = 1.;
-		assertTrue(actual.equals(expected));
+		Assert.assertEquals(expected, actual);
 	}
 
 	@Test
@@ -66,17 +65,17 @@ public class TestScanNumberFrench {
 		assertTrue(actual.equals(expected));
 	}
 
-//	@Test
-//	public void test6() {
-//		Double actual = new JIMC().scanMyNumber("  2,5 ");
-//		Double expected = 2.5;
-//		assertTrue(actual.equals(expected));
-//	}
-//
-//	@Test
-//	public void test7() {
-//		Double actual = new JIMC().scanMyNumber("  2,5, ");
-//		Double expected = 2.5;
-//		assertTrue(actual.equals(expected));
-//	}
+	// @Test
+	// public void test6() {
+	// Double actual = new JIMC().scanMyNumber(" 2,5 ");
+	// Double expected = 2.5;
+	// assertTrue(actual.equals(expected));
+	// }
+	//
+	// @Test
+	// public void test7() {
+	// Double actual = new JIMC().scanMyNumber(" 2,5, ");
+	// Double expected = 2.5;
+	// assertTrue(actual.equals(expected));
+	// }
 }
