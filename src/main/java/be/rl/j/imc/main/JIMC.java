@@ -1,12 +1,11 @@
 package be.rl.j.imc.main;
 
 import java.util.Arrays;
-import java.util.Scanner;
 import java.util.function.DoubleBinaryOperator;
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+
+import be.rl.j.imc.utils.InputUtils;
 
 /**
  *
@@ -61,11 +60,9 @@ public class JIMC {
 	private static Function<Double, Function<Double, UnaryOperator<Double>>> surchargeFunction = imcIdeal -> poids -> taille -> poids
 			- (imcIdeal * taille * taille);
 
-	private static Scanner scanner = new Scanner(System.in);
-
 	private static final String[] quit = new String[] { "non" };
 
-	public static void main0(String[] args) {
+	public static void main(String[] args) {
 		do {
 			System.out.println(TITRE.replaceAll(".", "" + (char) SEPARATOR_CHAR));
 			System.out.println(TITRE);
@@ -73,23 +70,14 @@ public class JIMC {
 
 			try {
 				System.out.println();
-				System.out.print("==> Votre poids en Kg svp !? ");
-				String poidsStr = scanner.next("\\d+\\.?\\,?\\d*.*").trim().replace(",", ".").replace(".", "à")
-						.replaceAll("\\D|\\s", "").replace("à", ".").trim();
-				System.out.print("==> Votre taille en cm svp !? ");
-				String tailleStr = scanner.next("\\d+\\.?\\,?\\d*.*").replaceAll("\\D|\\s", "").replace(",", ".")
-						.trim();
-				;
+				Double poids = InputUtils.inputMyNb("==> Votre poids en Kg svp !? ");
+				Double taille = InputUtils.inputMyNb("==> Votre taille en cm svp ?") * CM_TO_METRE_FACTEUR;
+
 				System.out.println();
 
 				// Dédicace à mon ami Jamal Melhaoui (triple Champion
 				// Boxe/Full-Contact/KickBoxing @ Marroco) 1997
 				// paramètres du 3/11/2016 :
-				Double poids = 54.;
-				Double taille = 165.;
-
-				poids = Double.parseDouble(poidsStr);
-				taille = Double.parseDouble(tailleStr) * CM_TO_METRE_FACTEUR;
 
 				Double imc = imcOp.applyAsDouble(poids, taille);
 
@@ -131,9 +119,9 @@ public class JIMC {
 				{
 					System.out.println(SEPARATOR.toString());
 					System.out.println();
-					System.out.print("==> Votre IMC visé svp ? ");
-					String targetImcStr = scanner.next("\\d+");
-					Double targetImc = Double.parseDouble(targetImcStr.replace(",", "."));
+
+					Double targetImc = InputUtils.inputMyNb("==> Votre IMC visé svp ? ");
+
 					Double poidsCalcul = targetImc * taille * taille;
 
 					final String str = String.format("Pour un IMC de %.1f vous devriez peser %.2f Kg !", targetImc,
@@ -169,9 +157,7 @@ public class JIMC {
 					System.out.println();
 					System.out.println();
 					{
-						System.out.print("==> Poids visé (en Kg) svp ? ");
-						String targetPoidsStr = scanner.next("\\d+");
-						Double targetPoids = Double.parseDouble(targetPoidsStr.replace(",", "."));
+						Double targetPoids = InputUtils.inputMyNb("==> Poids visé (en Kg) svp ? ");
 						imc = imcOp.applyAsDouble(targetPoids, taille);
 
 						System.out.println();
@@ -199,17 +185,13 @@ public class JIMC {
 					System.out.println(
 							"S'il vous plaît, J'espère que vous n'allez pas trop vous prendre la tête pour quelques Kg !");
 					System.out.println();
-					System.out.print("==> Voulez-vous continuer oui / non ? ");
-					scanner.reset();
-					quit[0] = scanner.next("\\w+");
+					quit[0] = InputUtils.inputMyQuery("==> Voulez-vous continuer oui / non ? ");
 					System.out.println();
 					System.out.println();
 				}
 			} catch (Throwable t) {
 				System.err.printf("Erreur : %s", t.getMessage());
 				t.printStackTrace();
-			} finally {
-				scanner.reset();
 			}
 		} while ("".equals(quit[0].trim()) || "o".equalsIgnoreCase(quit[0].trim().substring(0, 1)));
 		System.out.println();
@@ -220,18 +202,5 @@ public class JIMC {
 		System.out.println("signé... Sorcier Elphara77 :D");
 		System.out.println();
 		System.out.println("Merci :-)");
-	}
-
-	public static Double scanMyNumber(String str) {
-		// String myStr = str.trim().replaceAll("[,\\.]", ".");
-		// Pattern dotRegex = Pattern.compile("\\.");
-		//
-		// StringBuilder sb = new StringBuilder(myStr).reverse();
-		// Matcher matcher = dotRegex.matcher(sb.toString());
-		// while (matcher.find()) {
-		// str = sb.reverse().toString().replaceFirst("\\.", "");
-		// myStr = new StringBuilder(myStr).reverse().toString();
-		// }
-		return Double.parseDouble(str.replace(",", "."));
 	}
 }
