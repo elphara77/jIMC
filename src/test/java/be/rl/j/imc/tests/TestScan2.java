@@ -61,8 +61,39 @@ public class TestScan2 {
 
 	@Test
 	public void test02() {
-		test("non", -1);
+		test("OUI", 1);
 	}
+	
+	@Test
+	public void test03() {
+		test("o", 1);
+	}
+
+	@Test
+	public void test04() {
+		test("O", 1);
+	}
+
+	@Test
+	public void test05() {
+		test("yes", 1);
+	}
+
+	@Test
+	public void test06() {
+		test("Yes", 1);
+	}
+	
+	@Test
+	public void test07() {
+		test("Non", -1);
+	}
+	
+//	@Test
+//	public void test04() {
+//		test("Yeah", -1);
+//	}
+
 
 	private void test(String test, int expected) {
 		test(test, expected, false);
