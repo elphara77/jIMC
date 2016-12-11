@@ -15,7 +15,7 @@ import org.junit.runners.MethodSorters;
 import be.rl.j.imc.utils.InputUtils;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class TestScan {
+public class TestScan2 {
 
 	private class ResultRule extends TestWatcher {
 		@Override
@@ -56,68 +56,23 @@ public class TestScan {
 
 	@Test
 	public void test01() {
-		test("1", 1.);
+		test("oui", 1);
 	}
 
 	@Test
 	public void test02() {
-		test("2", 2.);
+		test("non", -1);
 	}
 
-	@Test
-	public void test03() {
-		test("2 ", 2.);
-	}
-
-	@Test
-	public void test04() {
-		test(" 2 ", 2.);
-	}
-
-	@Test
-	public void test05() {
-		test("  2.5 ", 2.5);
-	}
-
-	@Test
-	public void test06() {
-		test(" 2,5 ", 2.5);
-	}
-
-	@Test
-	public void test07() {
-		test(" 2,5, ", 2.5);
-	}
-
-	@Test
-	public void test08() {
-		test("&&ss 2,5, ,,,s", 2.5);
-	}
-
-	@Test
-	public void test09() {
-		test("2,5", 25., true);
-	}
-
-	@Test
-	public void test10() {
-		test("25.1", 25., true);
-	}
-
-	private void test(String test, Double expected) {
+	private void test(String test, int expected) {
 		test(test, expected, false);
 	}
 
-	private void test(String test, Double expected, boolean mustFails) {
+	private void test(String test, int expected, boolean mustFails) {
 		try {
-			Double actual = scansMyNb(test);
-			int len = 20;
-			if (test.length() < len) {
-				String testSpaces = String.format("%" + len + "s", test).substring(0, len - test.length())
-						.replaceAll(".", ".");
-				System.out.print(String.format("Testing (%s) scansMyNb : \"%" + len + "s\" --> result : \"%2.2f\"",
-						mustFails ? "invert" : "normal", testSpaces + test, expected));
-			}
+			int actual = InputUtils.testInputMyQuery("==> Voulez-vous continuer oui / non ? ", 1, "oui", "o", "yes",
+					"ja", "j", "y", -1, "non", "n", "no", "nee", "neen", test);
+
 			if (mustFails) {
 				Assert.assertNotEquals(expected, actual);
 			} else {
@@ -126,9 +81,5 @@ public class TestScan {
 		} catch (Exception e) {
 			Assert.fail(e.getMessage());
 		}
-	}
-
-	private Double scansMyNb(String str) {
-		return InputUtils.testInputMyNb(str);
 	}
 }

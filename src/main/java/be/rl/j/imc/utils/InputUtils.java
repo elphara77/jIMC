@@ -1,5 +1,7 @@
 package be.rl.j.imc.utils;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 /**
@@ -14,7 +16,7 @@ public class InputUtils {
 		System.out.print(String.format(msg, args));
 		try {
 			String input = scanner.nextLine();
-			return scanMyNumber(input.trim());
+			return inputMyNumber(input.trim());
 		} catch (NumberFormatException e) {
 			System.out.println(
 					"Désolé mais je n'ai pas compris votre nombre entré ici avant, veuillez s'il vous plaît le corriger, merci !");
@@ -22,24 +24,44 @@ public class InputUtils {
 		}
 	}
 
-	public static Double testInputMyNb(String msg, Object... args) {
-		scanner.reset();
-		try {
-			return scanMyNumber(msg.trim());
-		} catch (NumberFormatException e) {
-			System.out.println(
-					"Désolé mais je n'ai pas compris votre nombre entré ici avant, veuillez le corriger svp, merci !");
-			return inputMyNb(msg, args);
+	public static int inputMyQuery(String msg, Object... args) {
+		return inputMyQuery(false, msg, args);
+	}
+
+	public static int inputMyQuery(boolean test, String msg, Object... args) {
+		String input = null;
+
+		final Map<String, Integer> options = new HashMap<>();
+
+		int count = 0;
+		Integer option = -1;
+		for (Object arg : args) {
+			if (++count == args.length) {
+				input = (String) arg;
+			} else if (arg instanceof Integer) {
+				option = (Integer) arg;
+			} else if (arg instanceof String) {
+				options.put((String) arg, option);
+			}
 		}
+
+		String adaptedMsg = msg;
+		System.out.print(String.format(adaptedMsg, args));
+		if (test)
+			input = "";
+		else {
+			scanner.reset();
+			input = scanner.nextLine();
+		}
+
+		Integer response = options.get(input);
+		if (response == null) {
+			return inputMyQuery(test, adaptedMsg, args);
+		}
+		return response;
 	}
 
-	public static String inputMyQuery(String msg, Object... args) {
-		scanner.reset();
-		System.out.print(String.format(msg, args));
-		return scanner.nextLine();
-	}
-
-	private static Double scanMyNumber(String str) {
+	private static Double inputMyNumber(String str) {
 		boolean alreadyHasComma = false;
 		String result = "";
 		int a = 0;
@@ -52,6 +74,21 @@ public class InputUtils {
 				result += ".";
 			}
 		}
-		return Double.parseDouble(result);
+		Double parsed = null;
+		try {
+			parsed = Double.parseDouble(result);
+		} catch (Exception e) {
+			System.out.println("Désolé, je n'ai pas compris votre nombre ! Veuillez réessayez svp ? Merci :)");
+			return inputMyNumber(str);
+		}
+		return parsed;
+	}
+
+	public static Double testInputMyNb(String msg, Object... args) {
+		return inputMyNumber(msg.trim());
+	}
+
+	public static int testInputMyQuery(String msg, Object... args) {
+		return inputMyQuery(true, msg, args);
 	}
 }

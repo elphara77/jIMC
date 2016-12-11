@@ -60,7 +60,7 @@ public class JIMC {
 	private static Function<Double, Function<Double, UnaryOperator<Double>>> surchargeFunction = imcIdeal -> poids -> taille -> poids
 			- (imcIdeal * taille * taille);
 
-	private static final String[] quit = new String[] { "non" };
+	private static final int[] quit = new int[] { 0 };
 
 	public static void main(String[] args) {
 		do {
@@ -185,7 +185,8 @@ public class JIMC {
 					System.out.println(
 							"S'il vous plaît, J'espère que vous n'allez pas trop vous prendre la tête pour quelques Kg !");
 					System.out.println();
-					quit[0] = InputUtils.inputMyQuery("==> Voulez-vous continuer oui / non ? ");
+					quit[0] = InputUtils.inputMyQuery("==> Voulez-vous continuer oui / non ? ", 1, "oui", "o", "yes",
+							"ja", "j", "y", -1, "non", "n", "no", "nee", "neen");
 					System.out.println();
 					System.out.println();
 				}
@@ -193,7 +194,7 @@ public class JIMC {
 				System.err.printf("Erreur : %s", t.getMessage());
 				t.printStackTrace();
 			}
-		} while ("".equals(quit[0].trim()) || "o".equalsIgnoreCase(quit[0].trim().substring(0, 1)));
+		} while (quit[0] > -1);
 		System.out.println();
 		System.out.println("Fin du Calcul de l'IMC");
 		System.out.println();
