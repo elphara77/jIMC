@@ -14,8 +14,8 @@ import org.junit.runners.MethodSorters;
 
 import be.rl.j.imc.utils.InputUtils;
 
-@FixMethodOrder(MethodSorters.JVM)
-public class TestScanNumberFrench {
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+public class TestScan {
 
 	private class ResultRule extends TestWatcher {
 		@Override
@@ -55,47 +55,47 @@ public class TestScanNumberFrench {
 	}
 
 	@Test
-	public void test1() {
+	public void test01() {
 		testScanMyNb("1", 1.);
 	}
 
 	@Test
-	public void test2() {
+	public void test02() {
 		testScanMyNb("2", 2.);
 	}
 
 	@Test
-	public void test3() {
+	public void test03() {
 		testScanMyNb("2 ", 2.);
 	}
 
 	@Test
-	public void test4() {
+	public void test04() {
 		testScanMyNb(" 2 ", 2.);
 	}
 
 	@Test
-	public void test5() {
+	public void test05() {
 		testScanMyNb("  2.5 ", 2.5);
 	}
 
 	@Test
-	public void test6() {
+	public void test06() {
 		testScanMyNb(" 2,5 ", 2.5);
 	}
 
 	@Test
-	public void test7() {
+	public void test07() {
 		testScanMyNb(" 2,5, ", 2.5);
 	}
 
 	@Test
-	public void test8() {
+	public void test08() {
 		testScanMyNb("&&ss 2,5, ,,,s", 2.5);
 	}
 
 	@Test
-	public void test9() {
+	public void test09() {
 		testScanMyNb("2,5", 25., true);
 	}
 
@@ -115,8 +115,8 @@ public class TestScanNumberFrench {
 			if (test.length() < len) {
 				String testSpaces = String.format("%" + len + "s", test).substring(0, len - test.length())
 						.replaceAll(".", ".");
-				System.out.print(String.format("Testing scansMyNb : \"%" + len + "s\" --> result : \"%2.2f\"",
-						testSpaces + test, expected));
+				System.out.print(String.format("Testing (%s) scansMyNb : \"%" + len + "s\" --> result : \"%2.2f\"",
+						mustFails ? "invert" : "normal", testSpaces + test, expected));
 			}
 			if (mustFails) {
 				Assert.assertNotEquals(expected, actual);
