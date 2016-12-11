@@ -27,7 +27,6 @@ public class InputUtils {
 
 	public static Double testInputMyNb(String msg, Object... args) {
 		scanner.reset();
-		System.out.print(String.format(msg, args));
 		try {
 			return scanMyNumber(msg.trim());
 		} catch (NumberFormatException e) {
