@@ -17,21 +17,20 @@ import be.rl.j.imc.utils.InputUtils;
 @FixMethodOrder(MethodSorters.JVM)
 public class TestScanNumberFrench {
 
-	public class SimpleOnFailed extends TestWatcher {
-
+	private class ResultRule extends TestWatcher {
 		@Override
 		protected void succeeded(Description description) {
-			System.out.println(String.format("\tOk :) %s", description));
+			System.out.println(String.format("\tOk :) \t (%s)", description));
 		}
 
 		@Override
 		protected void failed(Throwable e, Description description) {
-			System.out.println(String.format("\tKO :( %s", description));
+			System.out.println(String.format("\tKO :( \t (%s)", description));
 		}
 	}
 
 	@Rule
-	public SimpleOnFailed ruleExample = new SimpleOnFailed();
+	public ResultRule simpleRule = new ResultRule();
 
 	private static int count = 0;
 
@@ -47,7 +46,7 @@ public class TestScanNumberFrench {
 
 	@Before
 	public void setUp() throws Exception {
-		title = "Test #" + ++count + " : ";
+		title = String.format("Test #%2d : ", ++count);
 		System.out.print(title);
 	}
 
