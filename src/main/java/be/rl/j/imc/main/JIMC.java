@@ -185,8 +185,7 @@ public class JIMC {
 					System.out.println(
 							"S'il vous plaît, J'espère que vous n'allez pas trop vous prendre la tête pour quelques Kg !");
 					System.out.println();
-					quit[0] = InputUtils.inputMyQuery("==> Voulez-vous continuer oui / non ? ", 1, "oui", "o", "yes",
-							"ja", "j", "y", -1, "non", "n", "no", "nee", "neen");
+					quit[0] = InputUtils.inputQuit();
 					System.out.println();
 					System.out.println();
 				}

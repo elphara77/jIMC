@@ -24,32 +24,33 @@ public class InputUtils {
 		}
 	}
 
-	public static int inputMyQuery(String msg, Object... args) {
-		return inputMyQuery(false, msg, args);
+	public static int inputQuit() {
+		return InputUtils.inputMyQuery(false, "==> Voulez-vous continuer oui / non ? ", 1, "oui", "o", "yes", "Yeah",
+				"ja", "j", "y", -1, "non", "n", "no", "nee", "neen");
 	}
 
-	public static int inputMyQuery(boolean test, String msg, Object... args) {
+	private static int inputMyQuery(boolean test, String msg, Object... args) {
 		String input = null;
 
 		final Map<String, Integer> options = new HashMap<>();
 
-		int count = 0;
 		Integer option = -1;
-		for (Object arg : args) {
-			if (++count == args.length) {
-				input = (String) arg;
-			} else if (arg instanceof Integer) {
+		for (int i = 1; i < args.length; i++) {
+			Object arg = args[i];
+			if (arg instanceof Integer) {
 				option = (Integer) arg;
 			} else if (arg instanceof String) {
-				options.put((String) arg, option);
+				options.put(((String) arg).toLowerCase(), option);
 			}
 		}
 
 		String adaptedMsg = msg;
 		System.out.print(String.format(adaptedMsg, args));
-		if (test)
-			input = "";
-		else {
+		if (test) {
+			input = ((String) args[0]);
+			System.out.print(input);
+			input = input.toLowerCase();
+		} else {
 			scanner.reset();
 			input = scanner.nextLine();
 		}
