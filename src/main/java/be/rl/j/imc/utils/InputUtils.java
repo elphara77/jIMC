@@ -49,14 +49,16 @@ public class InputUtils {
 		if (test) {
 			input = ((String) args[0]);
 			System.out.print(input);
-			input = input.toLowerCase();
+			if (input != null) {
+				input = input.toLowerCase();
+			}
 		} else {
 			scanner.reset();
 			input = scanner.nextLine();
 		}
 
 		Integer response = options.get(input);
-		if (response == null) {
+		if (response == null && input != null) {
 			return inputMyQuery(test, adaptedMsg, args);
 		}
 		return response;
