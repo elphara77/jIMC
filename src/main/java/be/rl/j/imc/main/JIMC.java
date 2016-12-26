@@ -37,27 +37,24 @@ public final class JIMC {
 
 	private static enum ImcIdeal {
 
-		IMC_0_DENUTRITION(0., 16.5, "dénutrition"), //
-		IMC_1_MAIGREUR(16.5, 18.5, "maigreur"), //
-		IMC_2_NORMAL(18.5, 25., "corpulence normale"), //
-		IMC_3_SURPOIDS(25., 30., "surpoids"), //
-		IMC_4_MODEREE(30., 35., "obésité modérée"), //
-		IMC_5_SEVERE(35., 40., "obésité sévère"), //
-		IMC_6_MASS(40., Double.MAX_VALUE, "obésité massive");
+		IMC_0_DENUTRITION(0., 16.5, "dénutrition", "en"), //
+		IMC_1_MAIGREUR(16.5, 18.5, "maigreur", "en"), //
+		IMC_2_NORMAL(18.5, 25., "corpulence normale", "de"), //
+		IMC_3_SURPOIDS(25., 30., "surpoids", "en"), //
+		IMC_4_MODEREE(30., 35., "obésité modérée", "en"), //
+		IMC_5_SEVERE(35., 40., "obésité sévère", "en"), //
+		IMC_6_MASS(40., Double.MAX_VALUE, "obésité massive", "en");
 
 		private Double max = 0.;
 		private Double min = 0.;
 		private String description = "à plat :P !";
+		private String prepoDescription = "en";
 
-		private ImcIdeal(Double imc, String description) {
-			this.max = imc;
-			this.description = description;
-		}
-
-		private ImcIdeal(Double imcMin, Double imcMax, String description) {
+		private ImcIdeal(Double imcMin, Double imcMax, String description, String prepo) {
 			this.min = imcMin;
 			this.max = imcMax;
 			this.description = description;
+			this.prepoDescription = prepo;
 		}
 
 		private static Double getSurcharge(Double imc) {
@@ -73,13 +70,22 @@ public final class JIMC {
 			throw new RuntimeException("IMC incalculable !");
 		}
 
+		private static String getPrepoDescription(Double imc) {
+			for (ImcIdeal imcRef : ImcIdeal.values()) {
+				if (imc >= imcRef.min && imc < imcRef.max) {
+					return imcRef.prepoDescription;
+				}
+			}
+			throw new RuntimeException("IMC incalculable !");
+		}
+
 		private static String getDescriptionAsValues(Double imc) {
 			for (ImcIdeal imcRef : ImcIdeal.values()) {
 				if (imc >= imcRef.min && imc < imcRef.max) {
 					return String.format("entre %.2f et %.2f", imcRef.min, imcRef.max);
 				}
 			}
-			//TODO with mixed switch
+			// TODO with mixed switch
 			throw new RuntimeException("description des valeurs IMC introuvable!");
 		}
 
@@ -107,7 +113,6 @@ public final class JIMC {
 				}
 			}
 			throw new RuntimeException("IMC incalculable !");
-
 		}
 	}
 
@@ -139,8 +144,9 @@ public final class JIMC {
 				Double imc = imcOp.applyAsDouble(poids, taille);
 
 				final String imcStr = String.format(
-						"* Actuellement, Vous avez un IMC de %.2f pour %.2f Kg et %.2f m => %s %s *", imc, poids,
-						taille, ImcIdeal.getDescription(imc), ImcIdeal.getDescriptionAsSmiley(imc));
+						"* Actuellement, Vous avez un IMC de %.2f pour %.2f Kg et %.2f m => Vous êtes %s %s %s *", imc,
+						poids, taille, ImcIdeal.getPrepoDescription(imc), ImcIdeal.getDescription(imc),
+						ImcIdeal.getDescriptionAsSmiley(imc));
 				String replaceAll = imcStr.replaceAll(".", "*");
 				System.out.println(replaceAll);
 				System.out.println(imcStr);
@@ -160,7 +166,7 @@ public final class JIMC {
 									ImcIdeal.getDescriptionAsValues(imcIdeal), poidsIdeal, ideal.description);
 							Double surcharge = surchargeFunction.apply(imcIdeal).apply(poids).apply(taille);
 							String str2 = String.format(", ", ImcIdeal.getDescriptionAsSmiley(imc));
-							if (surcharge >= 0.1 || -surcharge >= 0.1) {
+							if (surcharge >= -0.1 && -surcharge <= 0.1) {
 								str2 = String.format(" pas de différence ( votre cas : %s )",
 										ImcIdeal.getDescriptionAsSmiley(imc));
 							} else if (surcharge >= 1) {

@@ -119,7 +119,7 @@ public class TestScan2 {
 				Assert.assertEquals(expected, actual);
 			}
 		} catch (Exception e) {
-			if (mustFails) { // aïe
+			if (!mustFails) {
 				Assert.fail(e.getMessage());
 			}
 		}
