@@ -57,8 +57,31 @@ public final class JIMC {
 			this.prepoDescription = prepo;
 		}
 
-		private static Double getSurcharge(Double imc) {
-			return imc - IMC_2_NORMAL.min;
+		private static Double getSurcharge(Double surcharge, ImcIdeal ideal) {
+//			for (ImcIdeal imcRef : ImcIdeal.values()) {
+//				if (imc >= imcRef.min && imc < imcRef.max) {
+//					switch (imcRef) {
+//					case IMC_0_DENUTRITION:
+//						return ":-S CRITIQUE !";
+//					case IMC_1_MAIGREUR:
+//						return ":-(";
+//					case IMC_2_NORMAL:
+//						return "Vous êtes en forme :-)";
+//					case IMC_3_SURPOIDS:
+//						return ":-(";
+//					case IMC_4_MODEREE:
+//						return ":-S ATTENTION !";
+//					case IMC_5_SEVERE:
+//						return ":-S SEVERE !!!";
+//					case IMC_6_MASS:
+//						return ":-( CRITIQUE !!!";
+//					default:
+//						throw new RuntimeException("IMC incalculable !");
+//					}
+//				}
+//			}
+//			throw new RuntimeException("IMC incalculable !");
+			return 0.;
 		}
 
 		private static String getDescription(Double imc) {
@@ -79,14 +102,12 @@ public final class JIMC {
 			throw new RuntimeException("IMC incalculable !");
 		}
 
-		private static String getDescriptionAsValues(Double imc) {
-			for (ImcIdeal imcRef : ImcIdeal.values()) {
-				if (imc >= imcRef.min && imc < imcRef.max) {
-					return String.format("entre %.2f et %.2f", imcRef.min, imcRef.max);
-				}
+		private static String getDescriptionAsValues(ImcIdeal ideal) {
+			if (ImcIdeal.IMC_6_MASS.equals(ideal)) {
+				return String.format("au-dessus de %.2f", ideal.min);
+			} else {
+				return String.format("entre %.2f et %.2f", ideal.min, ideal.max);
 			}
-			// TODO with mixed switch
-			throw new RuntimeException("description des valeurs IMC introuvable!");
 		}
 
 		private static String getDescriptionAsSmiley(Double imc) {
@@ -114,15 +135,45 @@ public final class JIMC {
 			}
 			throw new RuntimeException("IMC incalculable !");
 		}
+
+		private static String getDescriptionSurchargeAsSmiley(Double imc, Double surcharge) {
+			for (ImcIdeal imcRef : ImcIdeal.values()) {
+				if (imc >= imcRef.min && imc < imcRef.max) {
+					switch (imcRef) {
+					case IMC_0_DENUTRITION:
+						return ":-S CRITIQUE !";
+					case IMC_1_MAIGREUR:
+						return ":-(";
+					case IMC_2_NORMAL:
+						return "Vous êtes en forme :-)";
+					case IMC_3_SURPOIDS:
+						return ":-(";
+					case IMC_4_MODEREE:
+						return ":-S ATTENTION !";
+					case IMC_5_SEVERE:
+						return ":-S SEVERE !!!";
+					case IMC_6_MASS:
+						return ":-( CRITIQUE !!!";
+					default:
+						throw new RuntimeException("IMC incalculable !");
+					}
+				}
+			}
+			throw new RuntimeException("IMC incalculable !");
+		}
 	}
 
 	private static DoubleBinaryOperator imcOp = (poids, taille) -> poids / (taille * taille);
-	private static DoubleBinaryOperator poidIdealOp = (imcIdeal, taille) -> imcIdeal * taille * taille;
+	private static DoubleBinaryOperator idealWeightOp = (imcIdeal, taille) -> imcIdeal * taille * taille;
 
 	private static Function<Double, Function<Double, UnaryOperator<Double>>> surchargeFunction = imcIdeal -> poids -> taille -> poids
 			- (imcIdeal * taille * taille);
 
 	private static final int[] quit = new int[] { 0 };
+
+	private static Double ownWeight = 0.;
+	private static Double ownHeight = 0.;
+	private static Double ownImc;
 
 	public static void main(String[] args) {
 		do {
@@ -132,21 +183,18 @@ public final class JIMC {
 
 			try {
 				System.out.println();
-				Double poids = InputUtils.inputMyNb("==> Votre poids en Kg svp ? ");
-				Double taille = InputUtils.inputMyNb("==> Votre taille en cm svp ? ") * CM_TO_METRE_FACTEUR;
-
 				System.out.println();
 
 				// Dédicace à mon ami Jamal Melhaoui (triple Champion
 				// Boxe/Full-Contact/KickBoxing @ Marroco) 1997
-				// paramètres du 3/11/2016 :
-
-				Double imc = imcOp.applyAsDouble(poids, taille);
+				ownWeight = InputUtils.inputMyNb("==> Votre poids en Kg svp ? ");
+				ownHeight = InputUtils.inputMyNb("==> Votre taille en cm svp ? ") * CM_TO_METRE_FACTEUR;
+				ownImc = imcOp.applyAsDouble(ownWeight, ownHeight);
 
 				final String imcStr = String.format(
-						"* Actuellement, Vous avez un IMC de %.2f pour %.2f Kg et %.2f m => Vous êtes %s %s %s *", imc,
-						poids, taille, ImcIdeal.getPrepoDescription(imc), ImcIdeal.getDescription(imc),
-						ImcIdeal.getDescriptionAsSmiley(imc));
+						"* Actuellement, Vous avez un IMC de %.2f pour %.2f Kg et %.2f m => Vous êtes %s %s %s *",
+						ownImc, ownWeight, ownHeight, ImcIdeal.getPrepoDescription(ownImc),
+						ImcIdeal.getDescription(ownImc), ImcIdeal.getDescriptionAsSmiley(ownImc));
 				String replaceAll = imcStr.replaceAll(".", "*");
 				System.out.println(replaceAll);
 				System.out.println(imcStr);
@@ -158,23 +206,25 @@ public final class JIMC {
 						if (imcIdeal == 0) {
 							imcIdeal = ideal.max;
 						}
-						poidsIdeal = poidIdealOp.applyAsDouble(imcIdeal, taille);
-						if (imc <= 0 || poidsIdeal <= 0) {
+						poidsIdeal = idealWeightOp.applyAsDouble(imcIdeal, ownHeight);
+						if (ownImc <= 0 || poidsIdeal <= 0) {
 							throw new RuntimeException("Erreur avec le calcul de votre IMC #1 !!!");
 						} else {
 							final String str1 = String.format("Pour um IMC %s il faudrait peser %.2f Kg (%s) ",
-									ImcIdeal.getDescriptionAsValues(imcIdeal), poidsIdeal, ideal.description);
-							Double surcharge = surchargeFunction.apply(imcIdeal).apply(poids).apply(taille);
-							String str2 = String.format(", ", ImcIdeal.getDescriptionAsSmiley(imc));
-							if (surcharge >= -0.1 && -surcharge <= 0.1) {
+									ImcIdeal.getDescriptionAsValues(ideal), poidsIdeal, ideal.description);
+							Double surcharge = surchargeFunction.apply(imcIdeal).apply(ownWeight).apply(ownHeight);
+							String str2 = String.format(", ", ImcIdeal.getDescriptionAsSmiley(ownImc));
+							if (Math.abs(surcharge) <= 0.1) {
 								str2 = String.format(" pas de différence ( votre cas : %s )",
-										ImcIdeal.getDescriptionAsSmiley(imc));
+										ImcIdeal.getDescriptionAsSmiley(ownImc));
 							} else if (surcharge >= 1) {
-								str2 = String.format(" une différence de %s de %.2f Kg en plus %s",
-										ImcIdeal.getSurcharge(imc), imcIdeal, ImcIdeal.getDescriptionAsSmiley(imc));
+								str2 = String.format("=> Vous avez %.2f en plus %s",
+										ImcIdeal.getSurcharge(surcharge, ideal),
+										ImcIdeal.getDescriptionSurchargeAsSmiley(imcIdeal, surcharge));
 							} else if (-surcharge >= 1) {
-								str2 = String.format(" différence %s de %.2f Kg en moins %s",
-										ImcIdeal.getSurcharge(imc), imcIdeal, ImcIdeal.getDescriptionAsSmiley(imc));
+								str2 = String.format("=> Vous avez %.2f en moins %s",
+										ImcIdeal.getSurcharge(surcharge, ideal),
+										ImcIdeal.getDescriptionAsSmiley(ownImc));
 							}
 							final String str = String.format("%s%s", str1, str2);
 							System.out.println(SEPARATOR.toString());
@@ -191,7 +241,7 @@ public final class JIMC {
 
 					Double targetImc = InputUtils.inputMyNb("==> Votre IMC visé svp ? ");
 
-					Double poidsCalcul = targetImc * taille * taille;
+					Double poidsCalcul = targetImc * ownHeight * ownHeight;
 
 					final String str = String.format("Pour un IMC de %.1f vous devriez peser %.2f Kg !", targetImc,
 							poidsCalcul);
@@ -209,7 +259,7 @@ public final class JIMC {
 							System.out.println();
 							System.out.println(String.format("Par rapport à un IMC de %.2f (%s) : ", imcIdeal.max,
 									imcIdeal.description));
-							Double surcharge = poidsCalcul - (imcIdeal.min * taille * taille);
+							Double surcharge = poidsCalcul - (imcIdeal.min * ownHeight * ownHeight);
 							if (surcharge >= 1) {
 								System.out
 										.println(String.format("Vous êtes (%.2f) en SUR-charge pondérale de %.2f Kg !",
@@ -227,7 +277,7 @@ public final class JIMC {
 					System.out.println();
 					{
 						Double targetPoids = InputUtils.inputMyNb("==> Poids visé (en Kg) svp ? ");
-						imc = imcOp.applyAsDouble(targetPoids, taille);
+						ownImc = imcOp.applyAsDouble(targetPoids, ownHeight);
 
 						System.out.println();
 
@@ -236,9 +286,10 @@ public final class JIMC {
 						} else {
 							System.out.println(String.format(
 									"Votre IMC serait alors de %.2f (votre poids idéal (pour rappel) est toujours de %.2f Kg calcul sur la base d'un IMC idéal référent de %.1f)",
-									imc, poidsIdeal, ImcIdeal.IMC_3_SURPOIDS.max, ImcIdeal.IMC_3_SURPOIDS.description));
+									ownImc, poidsIdeal, ImcIdeal.IMC_3_SURPOIDS.max,
+									ImcIdeal.IMC_3_SURPOIDS.description));
 							Double surcharge = targetPoids
-									- poidIdealOp.applyAsDouble(ImcIdeal.IMC_3_SURPOIDS.max, taille);
+									- idealWeightOp.applyAsDouble(ImcIdeal.IMC_3_SURPOIDS.max, ownHeight);
 							if (surcharge >= 1) {
 								System.out.println(String.format("Vous seriez en SUR-charge pondérale de %.2f Kg :-( !",
 										surcharge));
