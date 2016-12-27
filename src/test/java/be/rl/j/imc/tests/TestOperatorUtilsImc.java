@@ -2,7 +2,7 @@ package be.rl.j.imc.tests;
 
 import org.junit.Test;
 
-import be.rl.j.imc.utils.OperatorUtils;
+import be.rl.j.imc.utils.ImcOperatorUtils;
 
 public class TestOperatorUtilsImc extends ATestJIMC {
 
@@ -23,7 +23,7 @@ public class TestOperatorUtilsImc extends ATestJIMC {
 	private void test(Double weight, Double height, Double expected, Boolean mustFails) {
 		try {
 			System.out.println("Expected : " + expected);
-			Double actual = OperatorUtils.imcOperator.applyAsDouble(weight, height);
+			Double actual = ImcOperatorUtils.imcOperator.applyAsDouble(weight, height);
 			System.out.println("Actual : " + actual);
 			checkFails(expected, actual, mustFails);
 		} catch (Exception e) {
