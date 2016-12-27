@@ -11,6 +11,8 @@ import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 import org.junit.runners.MethodSorters;
 
+import be.rl.j.imc.utils.ImcRef;
+
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public abstract class ATestJIMC {
 
@@ -61,9 +63,9 @@ public abstract class ATestJIMC {
 
 	void checkNear(Double actual, boolean mustFails) {
 		if (mustFails) {
-			Assert.assertFalse(Math.abs(actual) <= .1);
+			Assert.assertFalse(Math.abs(actual) <= ImcRef.OVERLOAD_MAX);
 		} else {
-			Assert.assertTrue(Math.abs(actual) <= .1);
+			Assert.assertTrue(Math.abs(actual) <= ImcRef.OVERLOAD_MAX);
 		}
 	}
 

@@ -10,7 +10,7 @@ public enum ImcRef {
 	SEVERE_5(35., 40., "obésité sévère", "en"), //
 	MASSIVE_6(40., Double.MAX_VALUE, "obésité massive", "en");
 
-	private static final Double OVERLOAD_MAX = .1;
+	public static final Double OVERLOAD_MAX = .5;
 
 	private Double max = 0.;
 	private Double min = 0.;
@@ -44,15 +44,6 @@ public enum ImcRef {
 			return -1;
 		}
 		return 0;
-	}
-
-	public static String getDescription(Double imc) {
-		for (ImcRef imcRef : ImcRef.values()) {
-			if (imc >= imcRef.min && imc < imcRef.max) {
-				return imcRef.description;
-			}
-		}
-		throw new RuntimeException("unknown description for this IMC !");
 	}
 
 	public static String getPrepoDescription(Double imc) {
@@ -124,4 +115,10 @@ public enum ImcRef {
 	public String getPrepoDescription() {
 		return prepoDescription;
 	}
+
+	@Override
+	public String toString() {
+		return getDescription();
+	}
+
 }

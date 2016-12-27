@@ -1,6 +1,7 @@
 package be.rl.j.imc.main;
 
 import be.rl.j.imc.utils.ImcOperatorUtils;
+import be.rl.j.imc.utils.ImcRef;
 
 public class Profil {
 
@@ -11,11 +12,18 @@ public class Profil {
 
 	private Double weight = 0.;
 	private Double targetWeight = 0.;
+	private Double overload = 0.;
 	private Double height = 0.;
 	private Double imc = 0.;
 	private Double targetImc = 0.;
 
-	public void calculateOwnImc() {
+	public void calculate() {
+		calculateImc();
+		calculateOverload();
+		calculateTargetImc();
+	}
+
+	private void calculateImc() {
 		if (weight > 0. && height > 0.) {
 			imc = ImcOperatorUtils.imcOperator.applyAsDouble(weight, height);
 		} else {
@@ -23,12 +31,18 @@ public class Profil {
 		}
 	}
 
-	public void calculateTargetImc() {
+	private void calculateTargetImc() {
 		if (targetWeight > 0.) {
 			targetImc = ImcOperatorUtils.imcOperator.applyAsDouble(targetWeight, height);
 		} else {
 			throw new RuntimeException("Erreur : c'est impossible suivant votre profil de calculer votre IMC ciblé !");
 		}
+	}
+
+	private void calculateOverload() {
+		// overload =
+		// ImcOperatorUtils.overloadFunction.apply(imc).apply(weight).apply(height);
+		overload = ImcOperatorUtils.getOverload(weight, ImcRef.getImcRefs(imc), height);
 	}
 
 	public String getName() {
@@ -69,5 +83,9 @@ public class Profil {
 
 	public Double getTargetImc() {
 		return targetImc;
+	}
+
+	public Double getOverload() {
+		return overload;
 	}
 }
